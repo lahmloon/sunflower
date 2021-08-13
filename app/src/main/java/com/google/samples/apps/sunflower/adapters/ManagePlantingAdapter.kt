@@ -17,22 +17,20 @@
 package com.google.samples.apps.sunflower.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.samples.apps.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.sunflower.R
 import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
 import com.google.samples.apps.sunflower.databinding.ListItemGardenManagePlantingBinding
 import com.google.samples.apps.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
 
 
-class ManagePlantingAdapter :
-    ListAdapter<PlantAndGardenPlantings, ManagePlantingAdapter.ViewHolder>(
+class ManagePlantingAdapter(
+    private val onClickRemove: (plantId: String) -> Unit,
+) : ListAdapter<PlantAndGardenPlantings, ManagePlantingAdapter.ViewHolder>(
         ManagePlantDiffCallback()
     ) {
 
@@ -43,7 +41,8 @@ class ManagePlantingAdapter :
                 R.layout.list_item_garden_manage_planting,
                 parent,
                 false
-            )
+            ),
+            onClickRemove,
         )
     }
 
@@ -52,20 +51,15 @@ class ManagePlantingAdapter :
     }
 
     class ViewHolder(
-        private val binding: ListItemGardenManagePlantingBinding
+        private val binding: ListItemGardenManagePlantingBinding,
+        private val onClickRemove: (plantId: String) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.setClickListener { view ->
-                binding.viewModel?.plantId?.let { plantId ->
-                    navigateToPlant(plantId, view)
+            binding.setClickListener {
+                binding.viewModel?.plantId?.let {
+                    onClickRemove.invoke(it)
                 }
             }
-        }
-
-        private fun navigateToPlant(plantId: String, view: View) {
-            val direction = HomeViewPagerFragmentDirections
-                .actionViewPagerFragmentToPlantDetailFragment(plantId)
-            view.findNavController().navigate(direction)
         }
 
         fun bind(plantings: PlantAndGardenPlantings) {

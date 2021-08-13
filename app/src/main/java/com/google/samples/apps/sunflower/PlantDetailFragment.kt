@@ -59,7 +59,7 @@ class PlantDetailFragment : Fragment() {
         ).apply {
             viewModel = plantDetailViewModel
             lifecycleOwner = viewLifecycleOwner
-            callback = Callback { plant ->
+            addPlant = Callback { plant ->
                 plant?.let {
                     hideAppBarFab(fab)
                     plantDetailViewModel.addPlantToGarden()

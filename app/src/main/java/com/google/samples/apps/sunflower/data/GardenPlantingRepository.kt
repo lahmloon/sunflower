@@ -29,6 +29,11 @@ class GardenPlantingRepository @Inject constructor(
         gardenPlantingDao.insertGardenPlanting(gardenPlanting)
     }
 
+    suspend fun removeGardenPlanting(plantId: String) {
+        val gardenPlanting = GardenPlanting(plantId)
+        gardenPlantingDao.deleteGardenPlanting(gardenPlanting)
+    }
+
     suspend fun removeGardenPlanting(gardenPlanting: GardenPlanting) {
         gardenPlantingDao.deleteGardenPlanting(gardenPlanting)
     }

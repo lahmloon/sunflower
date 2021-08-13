@@ -17,6 +17,7 @@
 package com.google.samples.apps.sunflower
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,7 @@ class ManageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentManageBinding.inflate(inflater, container, false)
-        val adapter = ManagePlantingAdapter()
+        val adapter = ManagePlantingAdapter ( onClickRemove)
         binding.gardenList.adapter = adapter
 
         binding.addPlant.setOnClickListener {
@@ -65,5 +66,9 @@ class ManageFragment : Fragment() {
     private fun navigateToPlantListPage() {
         requireActivity().findViewById<ViewPager2>(R.id.view_pager).currentItem =
             PLANT_LIST_PAGE_INDEX
+    }
+
+    private val onClickRemove: (plantId : String) -> Unit = {
+            Log.d("PlantId", it)
     }
 }
