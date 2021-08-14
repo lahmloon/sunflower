@@ -20,6 +20,9 @@
 
     <data>
         <variable
+            name="longClickListener"
+            type="android.view.View.OnLongClickListener"/>
+        <variable
             name="clickListener"
             type="android.view.View.OnClickListener"/>
         <variable
@@ -34,6 +37,7 @@
         android:layout_marginEnd="@dimen/card_side_margin"
         android:layout_marginBottom="@dimen/card_bottom_margin"
         android:onClick="@{clickListener}"
+        android:onLongClick="@{longClickListener}"
         app:cardElevation="@dimen/card_elevation"
         app:cardPreventCornerOverlap="false"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Sunflower.Card">

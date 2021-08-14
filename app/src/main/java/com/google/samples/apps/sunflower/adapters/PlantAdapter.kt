@@ -31,7 +31,9 @@ import com.google.samples.apps.sunflower.databinding.ListItemPlantBinding
 /**
  * Adapter for the [RecyclerView] in [PlantListFragment].
  */
-class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
+class PlantAdapter(
+    private val onClickAdd: (plantId: String) -> Unit,
+    ) : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PlantViewHolder(
@@ -39,7 +41,8 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onClickAdd
         )
     }
 
@@ -49,13 +52,21 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
     }
 
     class PlantViewHolder(
-        private val binding: ListItemPlantBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+        private val binding: ListItemPlantBinding,
+        private val onClickAdd: (plantId: String) -> Unit,
+        ) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener {
                 binding.plant?.let { plant ->
                     navigateToPlant(plant, it)
                 }
+            }
+
+            binding.setLongClickListener {
+                binding.plant?.plantId?.let {
+                    onClickAdd(it)
+                }
+                true
             }
         }
 
