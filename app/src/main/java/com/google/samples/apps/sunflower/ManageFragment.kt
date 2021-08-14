@@ -25,26 +25,34 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.sunflower.adapters.ManagePlantingAdapter
 import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunflower.databinding.FragmentManageBinding
 import com.google.samples.apps.sunflower.viewmodels.GardenPlantingListViewModel
+import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ManageFragment : Fragment() {
 
-    private lateinit var binding: FragmentManageBinding
-
-    private val viewModel: GardenPlantingListViewModel by viewModels()
+    private val gardenPlantingListViewModel: GardenPlantingListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentManageBinding.inflate(inflater, container, false)
-        val adapter = ManagePlantingAdapter ( onClickRemove)
+
+        val binding = FragmentManageBinding.inflate(
+            inflater,
+            container,
+            false)
+        val adapter = ManagePlantingAdapter {
+            Log.d("PlantId", it)
+            gardenPlantingListViewModel.deletePlantToGarden(it)
+            Snackbar.make(binding.root, "Remove plant to garden", Snackbar.LENGTH_LONG).show()
+        }
         binding.gardenList.adapter = adapter
 
         binding.addPlant.setOnClickListener {
@@ -56,7 +64,7 @@ class ManageFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: ManagePlantingAdapter, binding: FragmentManageBinding) {
-        viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) { result ->
+        gardenPlantingListViewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) { result ->
             binding.hasPlantings = !result.isNullOrEmpty()
             adapter.submitList(result)
         }
@@ -66,9 +74,5 @@ class ManageFragment : Fragment() {
     private fun navigateToPlantListPage() {
         requireActivity().findViewById<ViewPager2>(R.id.view_pager).currentItem =
             PLANT_LIST_PAGE_INDEX
-    }
-
-    private val onClickRemove: (plantId : String) -> Unit = {
-            Log.d("PlantId", it)
     }
 }

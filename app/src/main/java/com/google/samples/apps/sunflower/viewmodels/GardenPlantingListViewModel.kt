@@ -19,19 +19,34 @@ package com.google.samples.apps.sunflower.viewmodels
 import androidx.lifecycle.*
 import com.google.samples.apps.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
+import com.google.samples.apps.sunflower.data.PlantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GardenPlantingListViewModel @Inject internal constructor(
-    gardenPlantingRepository: GardenPlantingRepository
+class GardenPlantingListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    plantRepository: PlantRepository,
+    private val gardenPlantingRepository: GardenPlantingRepository,
 ) : ViewModel() {
     val plantAndGardenPlantings: LiveData<List<PlantAndGardenPlantings>> = gardenPlantingRepository.getPlantedGardens().asLiveData()
 
-//    fun removePlantToGarden() {
-//        viewModelScope.launch {
-//            gardenPlantingRepository.removeGardenPlanting(plantId)
-//        }
-//    }
+    fun addPlantToGarden(plantId: String) {
+        viewModelScope.launch {
+            gardenPlantingRepository.createGardenPlanting(plantId)
+        }
+    }
+
+    fun removePlantToGarden(plantId: String) {
+        viewModelScope.launch {
+            gardenPlantingRepository.removeGardenPlanting(plantId)
+        }
+    }
+
+    fun deletePlantToGarden(plantId: String) {
+        viewModelScope.launch {
+            gardenPlantingRepository.deleteGardenPlanting(plantId)
+        }
+    }
 }

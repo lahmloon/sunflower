@@ -68,7 +68,7 @@ class HomeViewPagerFragment : Fragment() {
         return when (position) {
             MY_GARDEN_PAGE_INDEX -> getString(R.string.my_garden_title)
             PLANT_LIST_PAGE_INDEX -> getString(R.string.plant_list_title)
-            PLANT_LIST_MANAGE_PAGE_INDEX -> getString(R.string.my_garden_title)
+            PLANT_LIST_MANAGE_PAGE_INDEX -> "Manage"
             else -> null
         }
     }
